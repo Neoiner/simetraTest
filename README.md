@@ -38,4 +38,40 @@ TIMEZONE=Europe/Moscow
 
 #######################################################################################
 
+JSON-структура ответа:
+1) /vehicles:
+   'vehicle': {
+      [
+         '<vehicle_id (айди автомобиля)>': {
+            'id': <id: int>,
+            'longlati': <(longitude, latitude)>,
+            'speed': <speed: int>,
+            'gps_time': <gps_time: str>,
+            'vehicle_id': <vehicle_id: int>
+         },
+      ]
+   }
 
+2) /vehicles/{vehicle_id}:
+   'vehicle': {
+         '<vehicle_id (айди автомобиля)>': {
+            'id': <id: int>,
+            'longlati': <(longitude, latitude)>,
+            'speed': <speed: int>,
+            'gps_time': <gps_time: str>,
+            'vehicle_id': <vehicle_id: int>
+         }
+   }
+
+3) /vehicles/{vehicle_id}/track:
+   'track': {
+      [
+         '<vehicle_id (айди автомобиля)>': {
+            'id': <id: int>,
+            'longlati': <(longitude, latitude)>,
+            'speed': <speed: int>,
+            'gps_time': <gps_time: str>,
+            'vehicle_id': <vehicle_id: int>
+         },
+      ]
+   }
