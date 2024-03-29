@@ -1,7 +1,9 @@
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import JSONResponse
 import psycopg2
+
 from API.utils.checks import selectAllPartition
+from API.utils.createJSON import vehicalAllJSON, vehicalTrackJSON, vehicalLastJSON
 from API.config import POSTGRES_URI
 
 
@@ -16,9 +18,12 @@ async def getAll() -> JSONResponse:
     cursor = conn.cursor()
     cursor.execute(f"SELECT * FROM vehicle_control")
     conn.commit()
-    response = cursor.fetchall()
 
-    return {'vehicle': response}
+    response = await vehicalAllJSON(cursor.fetchall())
+
+    conn.close()
+
+    return response
 
 
 @vehicle.get('/vehicle/{vehicle_id}')
@@ -36,9 +41,11 @@ async def getOne(vehicle_id) -> JSONResponse:
     cursor.execute(f"SELECT * FROM vehicle_control WHERE vehicle_id = {int(vehicle_id)}"
                    f" ORDER BY gps_time ASC ;")
     conn.commit()
-    response = cursor.fetchone()
+    response = await vehicalLastJSON(cursor.fetchone())
+
     conn.close()
-    return {'vehicle': response}
+
+    return response
 
 
 @vehicle.get("/vehicle/{vehicle_id}/track")
@@ -55,6 +62,8 @@ async def getInTime(vehicle_id) -> JSONResponse:
     cursor = conn.cursor()
     cursor.execute(f"SELECT * FROM vehicle_control WHERE vehicle_id = {int(vehicle_id)}")
     conn.commit()
-    response = cursor.fetchall()
+
+    response = await vehicalTrackJSON(cursor.fetchall())
+
     conn.close()
-    return {'vehicle': response}
+    return response
